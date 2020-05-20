@@ -108,12 +108,7 @@ public class HNLogin {
                     scanner.scanUpTo("/a>&nbsp;(", into: &trash) // TODO: use config file
                     scanner.scanString("/a>&nbsp;(", into: &trash)
                     scanner.scanUpTo(")", into: &karma)
-
-                    guard let karmaString = karma as String? else {
-                        completion(nil, nil, .unknown)
-                        return
-                    }
-                    self._user = HNUser(username: username, karma: karmaString, age: "", aboutInfo: "")
+                    self._user = HNUser(username: username, karma: karma as String!, age: "", aboutInfo: "")
                     
                     self.getLoggedInUser(user: self._user!, completion: {(user, cookie, error) -> Void in
                         
@@ -212,17 +207,11 @@ public class HNLogin {
                         scanner.scanUpTo("&nbsp;(", into: &trash)
                         scanner.scanString("&nbsp;(", into: &trash)
                         scanner.scanUpTo(")", into: &karma)
-
-                        if let username = userString as String?,
-                            let karma = karma as String? {
-                            let user = HNUser(username: username, karma: karma, age: "", aboutInfo: "")
-                            self.getLoggedInUser(user: user, completion: completion)
-                        } else {
-                            print("getUsernameFromCookie: error converting username and karma?") // TODO: Logging
-                            completion(nil, nil, HNLoginError.unknown)
-                        }
-
-
+                        
+                        let user = HNUser(username: userString as String!, karma: karma as String!, age: "", aboutInfo: "")
+                        
+                        self.getLoggedInUser(user: user, completion: completion)
+                        
                         
                     } else {
                         print("getUsernameFromCookie: bad cookie?") // TODO: Logging
